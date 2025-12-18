@@ -3,10 +3,11 @@
 Minimal, hand-rolled **HL7 FHIR R4** TypeScript types.
 
 This package intentionally starts small and dependency-free, focusing on a clean,
-ergonomic type surface that can grow incrementally over time (and eventually
-support custom code generation).
+ergonomic type surface that can grow incrementally over time. The long-term goal
+is to support optional, transparent code generation — without sacrificing
+readability or control.
 
-> See [CHANGELOG.md](./CHANGELOG.md) for release notes and version history.
+> 📓 See [CHANGELOG.md](./CHANGELOG.md) for release notes and version history.
 
 ---
 
@@ -42,14 +43,17 @@ const observation: Observation = {
 };
 ```
 
-All resources use `resourceType` as a discriminant, making them safe to use in
-unions and switch statements.
+All resources use `resourceType` as a discriminant, making them safe and ergonomic
+to use in unions, type guards, and `switch` statements.
 
 ---
 
-## Included Resources (v0.0.1)
+## Supported Resources
 
-This initial release includes a minimal but practical core set:
+This package is intentionally **constrained**. Only explicitly supported
+resources are exported and included in the public API.
+
+Currently supported:
 
 - `Patient`
 - `Observation`
@@ -57,7 +61,21 @@ This initial release includes a minimal but practical core set:
 - `AllergyIntolerance`
 - `Practitioner`
 
-Common shared datatypes are also included, such as:
+These are also exposed via:
+
+- `SUPPORTED_RESOURCE_TYPES`
+- `SupportedResourceType`
+- `SupportedResource`
+- runtime type guards (`isSupportedResource`, `isSupportedResourceType`)
+
+This design allows downstream systems (e.g. FHIR servers, validators, ingestion
+pipelines) to **fail fast** when encountering unsupported resource types.
+
+---
+
+## Shared Datatypes
+
+A minimal but practical set of common FHIR datatypes is included:
 
 - `CodeableConcept`
 - `Coding`
@@ -66,33 +84,37 @@ Common shared datatypes are also included, such as:
 - `Reference`
 - `Quantity`
 - `Period`
+- Primitive wrappers (e.g. `FhirString`, `FhirDate`, etc.)
+
+These are reused across all supported resources.
 
 ---
 
 ## Design Principles
 
-- **Types-only** (no runtime dependencies)
-- **Minimal surface area**
-- **Spec-aligned, not over-engineered**
-- **Incremental growth over completeness**
-- **Generator-friendly structure**
+- **Types-first, runtime-light**
+- **No required runtime dependencies**
+- **Incremental growth over full spec coverage**
+- **Clear, auditable type definitions**
+- **Generator-friendly file structure**
+- **Explicitly scoped support**
 
-This is **not** a full replacement for the entire FHIR spec (yet). The goal is
-to provide a solid foundation that is easy to understand, audit, and extend.
+This is **not** a full FHIR SDK. It is a deliberately minimal foundation designed
+to grow alongside real usage, not ahead of it.
 
 ---
 
-## Roadmap (High Level)
+## Roadmap (High-Level)
 
-Planned future additions may include:
+Planned or considered additions:
 
-- Additional core resources
-- `AnyResource` discriminated union
-- Explicit FHIR version metadata
-- Optional generator for resource shells
-- Profile- or IG-aware type generation
+- More core R4 resources
+- `AnySupportedResource` discriminated unions
+- Explicit supported-version metadata
+- Optional schema-driven generator
+- Profile / Implementation Guide–aware extensions
 
-Breaking changes will be versioned carefully.
+Breaking changes will be versioned conservatively.
 
 ---
 
