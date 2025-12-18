@@ -6,6 +6,8 @@ This package intentionally starts small and dependency-free, focusing on a clean
 ergonomic type surface that can grow incrementally over time (and eventually
 support custom code generation).
 
+> See [CHANGELOG.md](./CHANGELOG.md) for release notes and version history.
+
 ---
 
 ## Installation
