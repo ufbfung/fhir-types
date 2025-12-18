@@ -1,0 +1,36 @@
+{
+  "name": "@ufbfung/fhir-types",
+  "version": "0.0.2",
+  "description": "Minimal HL7 FHIR R4 TypeScript types (hand-rolled MVP).",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "npm run clean && tsc -p tsconfig.json",
+    "prepack": "npm run build"
+  },
+  "keywords": [
+    "fhir",
+    "hl7",
+    "r4",
+    "typescript",
+    "types"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
