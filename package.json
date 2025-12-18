@@ -1,6 +1,6 @@
 {
   "name": "@ufbfung/fhir-types",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Minimal HL7 FHIR R4 TypeScript types (hand-rolled MVP).",
   "type": "module",
   "files": [
