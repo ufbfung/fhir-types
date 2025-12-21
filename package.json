@@ -2,6 +2,15 @@
   "name": "@ufbfung/fhir-types",
   "version": "0.0.3",
   "description": "Minimal HL7 FHIR R4 TypeScript types (hand-rolled MVP).",
+  "homepage": "https://github.com/ufbfung/fhir-types#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ufbfung/fhir-types.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ufbfung/fhir-types/issues"
+  },
+  "author": "Brian K Fung",
   "type": "module",
   "files": [
     "dist"
