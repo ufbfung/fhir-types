@@ -66,16 +66,90 @@ These are also exposed via:
 - `SUPPORTED_RESOURCE_TYPES`
 - `SupportedResourceType`
 - `SupportedResource`
-- runtime type guards (`isSupportedResource`, `isSupportedResourceType`)
+- Runtime guards:
+  - `isSupportedResourceType`
+  - `isSupportedResource`
+  - `assertSupportedResource`
 
 This design allows downstream systems (e.g. FHIR servers, validators, ingestion
 pipelines) to **fail fast** when encountering unsupported resource types.
 
 ---
 
+## Profile-Aware Types (US Core)
+
+In addition to base FHIR R4 resources, this package includes **profile-aware types**
+for common U.S. implementation guides.
+
+### US Core Patient
+
+The package provides a strict `USCorePatient` type aligned with
+**US Core Patient (STU6.1)**.
+
+This type enforces key *cardinality constraints at compile time*:
+
+- `identifier` → **required**, non-empty (1..*)
+- `name` → **required**, non-empty (1..*)
+- `gender` → **required** (1..1)
+- `meta.profile` → **required**, must include the US Core Patient canonical URL
+
+Example:
+
+```ts
+import type { USCorePatient } from "@ufbfung/fhir-types";
+
+const patient: USCorePatient = {
+  resourceType: "Patient",
+  meta: {
+    profile: ["http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"],
+  },
+  identifier: [{ system: "urn:mrn", value: "12345" }],
+  name: [{ family: "Doe", given: ["Jane"] }],
+  gender: "female",
+};
+```
+
+If any required fields are missing, TypeScript will fail at author time — similar
+to how SUSHI validates FHIR instances against profiles.
+
+---
+
+### Draft Construction Pattern
+
+To support ergonomic, incremental object construction, a `DraftUSCorePatient` type
+is also provided.
+
+This pattern allows developers to build partial objects and then explicitly
+confirm conformance when ready.
+
+```ts
+import type {
+  DraftUSCorePatient,
+  USCorePatient,
+} from "@ufbfung/fhir-types";
+
+const draft: DraftUSCorePatient = {
+  resourceType: "Patient",
+};
+
+draft.identifier = [{ value: "12345" }];
+draft.name = [{ family: "Doe", given: ["Jane"] }];
+draft.gender = "female";
+draft.meta = {
+  profile: ["http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"],
+};
+
+const finalPatient = draft as USCorePatient;
+```
+
+Future versions may optionally replace this assertion with runtime validation.
+
+---
+
 ## Shared Datatypes
 
-A minimal but practical set of common FHIR datatypes is included:
+A minimal but practical set of common FHIR datatypes is included, aligned with the
+FHIR specification:
 
 - `CodeableConcept`
 - `Coding`
@@ -84,9 +158,11 @@ A minimal but practical set of common FHIR datatypes is included:
 - `Reference`
 - `Quantity`
 - `Period`
+- `Extension`
+- `Element`
 - Primitive wrappers (e.g. `FhirString`, `FhirDate`, etc.)
 
-These are reused across all supported resources.
+These datatypes are reused across all supported resources.
 
 ---
 
@@ -98,6 +174,7 @@ These are reused across all supported resources.
 - **Clear, auditable type definitions**
 - **Generator-friendly file structure**
 - **Explicitly scoped support**
+- **Static enforcement of simple profile constraints (cardinality + profile identity)**
 
 This is **not** a full FHIR SDK. It is a deliberately minimal foundation designed
 to grow alongside real usage, not ahead of it.
@@ -112,7 +189,8 @@ Planned or considered additions:
 - `AnySupportedResource` discriminated unions
 - Explicit supported-version metadata
 - Optional schema-driven generator
-- Profile / Implementation Guide–aware extensions
+- Additional profile / Implementation Guide–aware types (e.g. US Core)
+- Optional future runtime validators (e.g. invariants, slicing) layered on top
 
 Breaking changes will be versioned conservatively.
 
