@@ -1,4 +1,39 @@
-import type { Element, FhirCode, FhirDate, FhirInstant, FhirDateTime, FhirDecimal, FhirId, FhirString, FhirUri } from "./primitives";
+import type {
+  FhirCode,
+  FhirDate,
+  FhirInstant,
+  FhirDateTime,
+  FhirDecimal,
+  FhirId,
+  FhirString,
+  FhirUri,
+} from "./primitives";
+
+export interface Extension {
+  url: FhirUri;
+  id?: FhirId;
+
+  // Complex extensions
+  extension?: Extension[];
+
+  // MVP value[x]s (expand over time)
+  valueString?: FhirString;
+  valueBoolean?: boolean;
+  valueInteger?: number;
+  valueDecimal?: FhirDecimal;
+  valueDate?: FhirDate;
+  valueDateTime?: FhirDateTime;
+  valueCode?: FhirCode;
+  valueUri?: FhirUri;
+
+  valueCoding?: Coding;
+  valueCodeableConcept?: CodeableConcept;
+}
+
+export interface Element {
+  id?: FhirId;
+  extension?: Extension[];
+}
 
 export interface Meta {
   versionId?: FhirId;
@@ -96,7 +131,7 @@ export interface Resource {
 export interface DomainResource extends Resource {
   text?: Narrative;
   contained?: Resource[];
-  extension?: any[]; // keep ultra-minimal for MVP
+  extension?: Extension[];
   modifierExtension?: any[];
 }
 

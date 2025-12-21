@@ -6,6 +6,7 @@ import type {
   Condition,
   AllergyIntolerance,
   Practitioner,
+  USCorePatient,
 } from "./index";
 
 // Basic discriminated-resource checks
@@ -40,3 +41,13 @@ void observation;
 void condition;
 void allergy;
 void practitioner;
+
+const usCorePatient: USCorePatient = {
+  resourceType: "Patient",
+  meta: { profile: ["http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"] },
+  identifier: [{ system: "urn:mrn", value: "123" }],
+  name: [{ family: "Doe", given: ["Jane"] }],
+  gender: "female",
+};
+
+void usCorePatient;

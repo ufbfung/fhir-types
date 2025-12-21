@@ -1,19 +1,20 @@
-export interface Extension {
-  url: string;
-  valueString?: string;
-  valueBoolean?: boolean;
-  valueInteger?: number;
-  valueDecimal?: number;
-  valueDate?: string;
-  valueDateTime?: string;
-  valueCode?: string;
-  valueUri?: string;
-}
+// removing extension and element from primitives as that's not semantically correct. Moving to datatypes
+// export interface Extension {
+//   url: string;
+//   valueString?: string;
+//   valueBoolean?: boolean;
+//   valueInteger?: number;
+//   valueDecimal?: number;
+//   valueDate?: string;
+//   valueDateTime?: string;
+//   valueCode?: string;
+//   valueUri?: string;
+// }
 
-export interface Element {
-  id?: string;
-  extension?: Extension[];
-}
+// export interface Element {
+//   id?: string;
+//   extension?: Extension[];
+// }
 
 /**
  * Minimal primitive wrappers (FHIR primitives are JSON scalars, with optional _element)
